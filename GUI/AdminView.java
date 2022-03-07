@@ -14,6 +14,7 @@ import javax.swing.event.ListSelectionEvent;
 import DataParsers.DataParser;
 import DataUnits.Course;
 import DataUnits.Data;
+import DataUnits.Teacher;
 import DataUnits.TimeSlot;
 import DataUnits.Training;
 
@@ -23,31 +24,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import Controllers.DirectorController;
 
-public class DirectorView extends JPanel implements ActionListener, ListSelectionListener {
+public class AdminView extends JPanel implements ActionListener, ListSelectionListener {
 
 	// Controller
 	DirectorController controller;
 
 	// Buttons
-	JButton courseButton;
-	JButton trainingButton;
+	JButton courseReqButton;
+	JButton staffButton;
 	JButton returnButton;
+
+
 	JButton addTrainingButton;
 	JButton saveCourseButton;
 	JButton addTimeButton;
 
 	// Lists
-	JList<Course> courseList;
-	JList<Training> trainingList;
+	JList<Course> reqList; //this will be course req
 
-	// Combobox
-	JComboBox<String> dayPicker;
-	JComboBox<String> timePicker;
-
-	// Data for comboboxes
-	String[] day = { "MON", "TUE", "WED", "THU", "FRI" };
-	// int[] time = {9,10,11,12,13,14,15,16,17};
-	String[] time = { "09", "10", "11", "12", "13", "14", "15", "16", "17" };
+	JList<Teacher> teacherList;
 
 	// File Chooser
 	JFileChooser j;
@@ -62,7 +57,7 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 
 	JTextArea displayArea;
 	Course c;
-	public DirectorView(ActionListener a, DirectorController controller) {
+	public AdminView(ActionListener a, DirectorController controller) {
 		this.controller = controller;
 
 		displayArea = new JTextArea();
@@ -103,8 +98,6 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 		returnButton.setActionCommand("Return");
 		returnButton.addActionListener(a);
 
-		dayPicker = new JComboBox<String>(day);
-		timePicker = new JComboBox<String>(time);
 
 		addTimeButton = new JButton("Add timeslot");
 		addTimeButton.setActionCommand("AddTime");

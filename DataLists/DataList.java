@@ -7,7 +7,8 @@ import java.util.ArrayList;
 
 public class DataList<T extends Data> extends AbstractList<T> {
     ArrayList<T> storage;
-
+    
+    
     public DataList()
     {
         storage = new ArrayList<T>();
@@ -40,6 +41,10 @@ public class DataList<T extends Data> extends AbstractList<T> {
     }
     public T get(int i)
     {
+        return storage.get(i);
+    }
+    public T getByIndex(int i)
+    {
         for(T elem : storage)
         {
             if(elem.getId() == i)
@@ -62,6 +67,10 @@ public class DataList<T extends Data> extends AbstractList<T> {
     }
     public boolean add(T elem)
     {
+        if(contains(elem.getName())){
+            System.out.println("element exists");
+            return false;
+        }
         return storage.add(elem);
     }
     public int size()

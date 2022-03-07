@@ -1,21 +1,24 @@
 package DataUnits;
 import java.util.ArrayList;
 
+import DataLists.DataList;
+
 public class Course implements Data{
     int id;
     String name;
-    ArrayList<Training> trainingReqList;
+    DataList<Training> trainingReqList;
     ArrayList<TimeSlot> timeSlots;
     public Course(int A, String t)
     {
         id = A;
         name = t;
-        trainingReqList = new ArrayList<Training>();
+        trainingReqList = new DataList<Training>();
         timeSlots = new ArrayList<TimeSlot>();
     }
     public void addTraining(Training t)
     {
         trainingReqList.add(t);
+        System.out.println(trainingReqList);
     }
     public void addTimeSlot(TimeSlot t)
     {
@@ -31,6 +34,27 @@ public class Course implements Data{
     }
     public String toString()
     {
-        return String.format("(%d,%s,%s)",id,name,trainingReqList.toString());
+        return name;
+    }
+    public String display()
+    {
+        String A = "";
+        A += id+" "+name+'\n';
+        A += "Trainings:\n";
+        for(Training t: trainingReqList)
+        {
+            System.out.println(trainingReqList);
+            if(t==null)
+                continue;
+            A += '\t'+ t.toString()+'\n';
+        }
+        A += "Time Slots:\n";
+        for(TimeSlot t: timeSlots)
+        {
+            if(t==null)
+                break;
+            A += '\t'+ t.toString()+'\n';
+        }
+        return A;
     }
 }

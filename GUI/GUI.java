@@ -8,16 +8,23 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
 import java.awt.Font;
+import Controllers.DirectorController;
+import Controllers.AdminController;
+
+
 public class GUI extends JFrame implements ActionListener {
 	Container cPane;
 	CardLayout cardLayout;
 	JPanel cards;
 	// Attributes
-	final int HEIGHT = 350;
-	final int WIDTH = HEIGHT * 2;
+	final int HEIGHT = 400;
+	final int WIDTH = (int)(HEIGHT * 2.5);
 	DirectorView dv;
+	DirectorController dc;
+
+	AdminView av;
+	AdminController ac;
 	JPanel iv;
 
 	public GUI() {  
@@ -32,8 +39,17 @@ public class GUI extends JFrame implements ActionListener {
 		
 		iv = new InitialView(this);
 		cPane.add(iv, "Test1");
-		dv = new DirectorView(this);
+
+
+
+		dc = new DirectorController();
+		dv = new DirectorView(this, dc);
+		dc.setView(dv);
 		cPane.add(dv, "Director");
+
+		ac = new AdminController();
+		av = new AdminView(this, dc);
+		cPane.add(av, "Admin");
 		
 		
 	}
@@ -46,6 +62,9 @@ public class GUI extends JFrame implements ActionListener {
 		{
 			case "Director":
 				cardLayout.show(cPane, "Director");
+				break;
+			case "Admin":
+				cardLayout.show(cPane, "Admin");
 				break;
 			case "Return":
 				cardLayout.show(cPane, "Test1");

@@ -1,19 +1,12 @@
 package DataParsers;
-import java.util.Scanner;
 
-import DataLists.DataList;
-import DataUnits.Data;
+import java.io.FileWriter;
 
-import java.io.File;
 
-public class DataParser {
-    public static <T extends Data> DataList<T> parseData(String fileLocation, Class<T> mode)
+public class CourseReqWriter {
+    public static void writeCoursReq(String path, DataList<Course> data)
     {
-        DataList<T> ret = new DataList<T>();
-        System.out.println(fileLocation);
-        File f = new File(fileLocation);
-        Scanner scan;
-        String line;
+        FileWriter fw = new FileWriter("out.txt");
         try {
             scan = new Scanner(f);
             
@@ -28,6 +21,5 @@ public class DataParser {
             e.printStackTrace();
             System.out.println("error! oh no");
         }
-        return ret;
     }
 }

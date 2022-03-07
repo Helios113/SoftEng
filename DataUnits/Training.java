@@ -1,6 +1,6 @@
 package DataUnits;
 
-public class Training implements Comparable<Training>{
+public class Training implements Data{
     private int id;
     private String name;
     public Training(int i, String n)
@@ -16,12 +16,8 @@ public class Training implements Comparable<Training>{
     {
         return name;
     }
-    public int compareTo(Training T)
-    {
-        return this.id-T.getId();        
-    }
     @Override
     public String toString() {
-        return String.format("[%d,%s]",id,name);
+        return String.format("%d-%s",id,name);
     }
 }
