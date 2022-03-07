@@ -32,7 +32,7 @@ public class GUI extends JFrame implements ActionListener {
 		
 		iv = new InitialView(this);
 		cPane.add(iv, "Test1");
-		dv = new DirectorView();
+		dv = new DirectorView(this);
 		cPane.add(dv, "Director");
 		
 		
@@ -47,7 +47,7 @@ public class GUI extends JFrame implements ActionListener {
 			case "Director":
 				cardLayout.show(cPane, "Director");
 				break;
-			case "Me":
+			case "Return":
 				cardLayout.show(cPane, "Test1");
 				break;
 

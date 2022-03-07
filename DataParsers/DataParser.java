@@ -21,7 +21,7 @@ public class DataParser {
                 line = scan.nextLine();
                 line = line.strip(); //remove space
                 String[] params = line.split(","); // split on commas
-                T t = mode.getDeclaredConstructor().newInstance(Integer.parseInt(params[0]), params[1]);
+                T t = mode.getDeclaredConstructor(int.class,String.class).newInstance(Integer.parseInt(params[0]), params[1]);
                 ret.add(t);
             }
         } catch (Exception e) {
