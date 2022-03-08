@@ -1,5 +1,5 @@
 package DataUnits;
-public class TimeSlot{
+public class TimeSlot implements Data{
     int time = 0;
     DayOfWeek dow;
     public TimeSlot(String time, String dow)
@@ -15,5 +15,13 @@ public class TimeSlot{
     public String toString()
     {
         return String.format("%s%02d", dow.toString(),time);
+    }
+    @Override
+    public String getName() {
+        return String.format("%s%02d", dow.toString(),time);
+    }
+    @Override
+    public int getId() {
+        return time;
     }
 }

@@ -7,13 +7,13 @@ public class Course implements Data{
     int id;
     String name;
     DataList<Training> trainingReqList;
-    ArrayList<TimeSlot> timeSlots;
+    DataList<TimeSlot> timeSlots;
     public Course(int A, String t)
     {
         id = A;
         name = t;
         trainingReqList = new DataList<Training>();
-        timeSlots = new ArrayList<TimeSlot>();
+        timeSlots = new DataList<TimeSlot>();
     }
     public void addTraining(Training t)
     {
@@ -22,9 +22,10 @@ public class Course implements Data{
     }
     public void addTimeSlot(TimeSlot t)
     {
-        timeSlots.add(t);
+        if(!timeSlots.contains(t))
+            timeSlots.add(t);
     }
-    public ArrayList<TimeSlot> getTimeSlots()
+    public DataList<TimeSlot> getTimeSlots()
     {
         return timeSlots;
     }
