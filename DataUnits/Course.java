@@ -24,6 +24,14 @@ public class Course implements Data{
     {
         timeSlots.add(t);
     }
+    public ArrayList<TimeSlot> getTimeSlots()
+    {
+        return timeSlots;
+    }
+    public DataList<Training> getTrainingReqList()
+    {
+        return trainingReqList;
+    }
     public int getId()
     {
         return id;

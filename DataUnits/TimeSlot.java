@@ -7,8 +7,13 @@ public class TimeSlot{
         this.time = Integer.parseInt(time);
         this.dow = DayOfWeek.valueOf(dow);
     }
+    public TimeSlot(String time)
+    {
+        this.time = Integer.parseInt(time.substring(3));
+        this.dow = DayOfWeek.valueOf(time.substring(0,3));
+    }
     public String toString()
     {
-        return String.format("%s%2d", dow.toString(),time);
+        return String.format("%s%02d", dow.toString(),time);
     }
 }

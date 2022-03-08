@@ -29,8 +29,6 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 	DirectorController controller;
 
 	// Buttons
-	JButton courseButton;
-	JButton trainingButton;
 	JButton returnButton;
 	JButton addTrainingButton;
 	JButton saveCourseButton;
@@ -62,7 +60,9 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 
 	JTextArea displayArea;
 	Course c;
-	public DirectorView(ActionListener a, DirectorController controller) {
+	GUI parent;
+	public DirectorView(GUI a, DirectorController controller) {
+		parent = a;
 		this.controller = controller;
 
 		displayArea = new JTextArea();
@@ -77,17 +77,8 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 		subGroup3.setLayout(new GridBagLayout());
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		courseButton = new JButton("Choose Course List");
-		courseButton.setActionCommand("OpenCourse");
-		courseButton.addActionListener(this);
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		subGroup1.add(courseButton, gbc);
-
-		trainingButton = new JButton("Choose Training List");
-		trainingButton.setActionCommand("OpenTraining");
-		trainingButton.addActionListener(this);
-		subGroup2.add(trainingButton, gbc);
+	
+		
 
 		gbc.gridy = 2;
 		saveCourseButton = new JButton("Save List");
@@ -100,6 +91,7 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 		subGroup2.add(addTrainingButton, gbc);
 
 		returnButton = new JButton("Back to main");
+		returnButton.setBackground(Color.RED);
 		returnButton.setActionCommand("Return");
 		returnButton.addActionListener(a);
 
@@ -107,6 +99,7 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 		timePicker = new JComboBox<String>(time);
 
 		addTimeButton = new JButton("Add timeslot");
+		addTimeButton.setBackground(Color.blue);
 		addTimeButton.setActionCommand("AddTime");
 		addTimeButton.addActionListener(this);
 		gbc.gridy=0;
@@ -142,20 +135,6 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-			case "OpenCourse":
-				j = new JFileChooser();
-				r = j.showOpenDialog(null);
-				if (r == JFileChooser.APPROVE_OPTION) {
-					setCourseList(j.getSelectedFile().getAbsolutePath());
-				}
-				break;
-			case "OpenTraining":
-				j = new JFileChooser();
-				r = j.showOpenDialog(null);
-				if (r == JFileChooser.APPROVE_OPTION) {
-					setTrainingList(j.getSelectedFile().getAbsolutePath());
-				}
-				break;
 			case "AddTime":
 				c = courseList.getSelectedValue();
 				if(c==null)
@@ -180,7 +159,8 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 				updateList(courseList.getSelectedIndex());
 				break;
 			case "SaveCourse":
-				controller.saveData();
+				controller.saveReqData(parent.getPath(FileTypes.req));
+				controller.saveTimeData(parent.getPath(FileTypes.time));
 				break;
 		}
 	}
@@ -212,4 +192,9 @@ public class DirectorView extends JPanel implements ActionListener, ListSelectio
 			trainingList.setListData(controller.getTrainingData().toArray(new Training[0]));
 	}
 
+	public void loadData()
+	{
+		setCourseList(parent.getPath(FileTypes.course));
+		setTrainingList(parent.getPath(FileTypes.training));
+	}
 }

@@ -5,21 +5,21 @@ public class Teacher implements Data{
     int id;
     String name;
     DataList<Training> trainings;
-    ArrayList<TimeSlot> engagmentSlots;
+    ArrayList<CourseTime> engagementSlots;
     public Teacher(int A, String n)
     {
         id = A;
         name = n;
         trainings = new DataList<Training>();
-        engagmentSlots = new ArrayList<TimeSlot>();
+        engagementSlots = new ArrayList<CourseTime>();
     }
     public void addTraining(Training t)
     {
         trainings.add(t);
     }
-    public void addTimeSlot(TimeSlot t)
+    public void addTimeSlot(CourseTime t)
     {
-        engagmentSlots.add(t);
+        engagementSlots.add(t);
     }
     public int getId()
     {
@@ -33,11 +33,13 @@ public class Teacher implements Data{
     {
         return String.format("(%d,%s,%s)",id,name,trainings.toString());
     }
-    public boolean isAvailabe(TimeSlot t)
+    public boolean isAvailable(TimeSlot t)
     {
-        for(TimeSlot e : engagmentSlots)
+        System.out.println("isAvailable "+name+" "+t);
+       
+        for(CourseTime e : engagementSlots)
         {
-            if(e.dow == t.dow && e.time == t.time)
+            if(e.getTimeSlot().dow == t.dow && e.getTimeSlot().time == t.time)
                 return false;
         }
         return true;
@@ -53,5 +55,19 @@ public class Teacher implements Data{
             }
         }
         return ret;
+    }
+    public ArrayList<CourseTime> getTimeSlot()
+    {
+        return engagementSlots;
+    }
+    public ArrayList<Training> getTrainings()
+    {
+        ArrayList<Training> ret = new ArrayList<Training>();
+        for(CourseTime t: engagementSlots)
+        {
+            ret.addAll(trainingsNeeded(t.getCourse().getTrainingReqList()));
+        }
+        return ret;
+
     }
 }

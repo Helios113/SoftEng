@@ -2,6 +2,7 @@ package Controllers;
 import javax.sound.sampled.DataLine;
 
 import DataLists.DataList;
+import DataParsers.DataWriter;
 import DataParsers.DataParser;
 import DataUnits.Course;
 import DataUnits.TimeSlot;
@@ -49,8 +50,14 @@ public class DirectorController {
     {
         courseList.getByIndex(i).addTimeSlot(t);
     }
-    public void saveData()
+    public void saveReqData(String path)
     {
-        
+        //todo
+        DataWriter.writeCourseReq(path, courseList);
+    }
+    public void saveTimeData(String path)
+    {
+        //todo
+        DataWriter.writeCourseTime(path, courseList);
     }
 }

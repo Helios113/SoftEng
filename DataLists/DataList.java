@@ -88,5 +88,8 @@ public class DataList<T extends Data> extends AbstractList<T> {
         }
         return ret;
     }
-    
+    public void remove(T A)
+    {
+        storage.remove(A);
+    }
 }

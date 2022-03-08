@@ -15,6 +15,7 @@ import DataParsers.DataParser;
 import DataUnits.Course;
 import DataUnits.Data;
 import DataUnits.Teacher;
+import DataUnits.TeacherAvailability;
 import DataUnits.TimeSlot;
 import DataUnits.Training;
 
@@ -22,27 +23,26 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import Controllers.AdminController;
 import Controllers.DirectorController;
+import DataLists.DataList;
+import DataUnits.CourseTime;
 
 public class AdminView extends JPanel implements ActionListener, ListSelectionListener {
 
 	// Controller
-	DirectorController controller;
+	AdminController controller;
 
 	// Buttons
-	JButton courseReqButton;
-	JButton staffButton;
+	JButton assignButton;
+	JButton saveButton;
 	JButton returnButton;
 
-
-	JButton addTrainingButton;
-	JButton saveCourseButton;
-	JButton addTimeButton;
-
 	// Lists
-	JList<Course> reqList; //this will be course req
-
-	JList<Teacher> teacherList;
+	// JList<CourseRequirements> jListRequirements; // this will be course req
+	JList<CourseTime> slotsToFill; // empty slots with no teacher assigned yet
+	JList<TeacherAvailability> availableTeachers; // existing teachers' trainings
 
 	// File Chooser
 	JFileChooser j;
@@ -57,7 +57,10 @@ public class AdminView extends JPanel implements ActionListener, ListSelectionLi
 
 	JTextArea displayArea;
 	Course c;
-	public AdminView(ActionListener a, DirectorController controller) {
+	GUI parent;
+
+	public AdminView(GUI a, AdminController controller) {
+		parent = a;
 		this.controller = controller;
 
 		displayArea = new JTextArea();
@@ -72,62 +75,40 @@ public class AdminView extends JPanel implements ActionListener, ListSelectionLi
 		subGroup3.setLayout(new GridBagLayout());
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		courseButton = new JButton("Choose Course List");
-		courseButton.setActionCommand("OpenCourse");
-		courseButton.addActionListener(this);
+		// newStuff
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		subGroup1.add(courseButton, gbc);
+		subGroup3.add(displayArea, gbc);
 
-		trainingButton = new JButton("Choose Training List");
-		trainingButton.setActionCommand("OpenTraining");
-		trainingButton.addActionListener(this);
-		subGroup2.add(trainingButton, gbc);
+		assignButton = new JButton("Produce List");
+		assignButton.setActionCommand("Save");
+		assignButton.addActionListener(this);
+		gbc.gridy=1;
+		subGroup1.add(assignButton, gbc);
+		gbc.gridy=0;
 
-		gbc.gridy = 2;
-		saveCourseButton = new JButton("Save List");
-		saveCourseButton.setActionCommand("SaveCourse");
-		saveCourseButton.addActionListener(this);
-		subGroup1.add(saveCourseButton, gbc);
-		addTrainingButton = new JButton("Add Training to Course");
-		addTrainingButton.setActionCommand("AddTraining");
-		addTrainingButton.addActionListener(this);
-		subGroup2.add(addTrainingButton, gbc);
+		slotsToFill = new JList<CourseTime>();
+		slotsToFill.setPreferredSize(new Dimension(200, 200));
+		slotsToFill.addListSelectionListener(this);
+		subGroup1.add(slotsToFill, gbc);
+
+		availableTeachers = new JList<TeacherAvailability>();
+		availableTeachers.setPreferredSize(new Dimension(200, 200));
+		availableTeachers.addListSelectionListener(this);
+		subGroup2.add(availableTeachers, gbc);
+
+		assignButton = new JButton("Assign to course");
+		assignButton.setActionCommand("Assign");
+		assignButton.addActionListener(this);
+		gbc.gridy = 1;
+		subGroup2.add(assignButton, gbc);
+		this.add(subGroup1);
+		this.add(subGroup2);
+		this.add(subGroup3);
 
 		returnButton = new JButton("Back to main");
 		returnButton.setActionCommand("Return");
 		returnButton.addActionListener(a);
-
-
-		addTimeButton = new JButton("Add timeslot");
-		addTimeButton.setActionCommand("AddTime");
-		addTimeButton.addActionListener(this);
-		gbc.gridy=0;
-		subGroup3.add(displayArea,gbc);
-		gbc.gridy=1;
-		subGroup3.add(dayPicker,gbc);
-		gbc.gridx=1;
-		subGroup3.add(timePicker,gbc);
-		gbc.gridx=0;
-		gbc.gridy=2;
-		subGroup3.add(addTimeButton,gbc);
-
-
-		gbc.gridy = 1;
-		courseList = new JList<>();
-		courseList.setPreferredSize(new Dimension(200, 200));
-		courseList.addListSelectionListener(this);
-		subGroup1.add(courseList, gbc);
-
-		trainingList = new JList<>();
-		trainingList.setPreferredSize(new Dimension(200, 200));
-		subGroup2.add(trainingList, gbc);
-
-
-
-		this.add(subGroup1);
-		this.add(subGroup2);
-		this.add(subGroup3);
 
 		this.add(returnButton);
 
@@ -135,74 +116,42 @@ public class AdminView extends JPanel implements ActionListener, ListSelectionLi
 
 	public void actionPerformed(ActionEvent e) {
 		switch (e.getActionCommand()) {
-			case "OpenCourse":
-				j = new JFileChooser();
-				r = j.showOpenDialog(null);
-				if (r == JFileChooser.APPROVE_OPTION) {
-					setCourseList(j.getSelectedFile().getAbsolutePath());
-				}
+			case "Assign":
+				availableTeachers.getSelectedValue().getTeacher()
+						.addTimeSlot(slotsToFill.getSelectedValue());
+				controller.removeTimeSlot(slotsToFill.getSelectedValue());
+				updateViews();
 				break;
-			case "OpenTraining":
-				j = new JFileChooser();
-				r = j.showOpenDialog(null);
-				if (r == JFileChooser.APPROVE_OPTION) {
-					setTrainingList(j.getSelectedFile().getAbsolutePath());
-				}
+			case "Save":
+				controller.produceList();
 				break;
-			case "AddTime":
-				c = courseList.getSelectedValue();
-				if(c==null)
-					break;
-				r = c.getId();
-				System.out.println(timePicker.getSelectedItem().toString());
-				System.out.println(dayPicker.getSelectedItem().toString());
-				controller.addTimeSlot(r,
-						new TimeSlot(timePicker.getSelectedItem().toString(), dayPicker.getSelectedItem().toString()));
-				updateList(courseList.getSelectedIndex());
-				break;
-			case "AddTraining":
-				t = trainingList.getSelectedIndex();
-				if(t==-1)
-					break;
-				c = courseList.getSelectedValue();
-				if(c==null)
-					break;
-				r = c.getId();
-				System.out.println(r+" "+ t);
-				controller.addTraining(r, trainingList.getModel().getElementAt(t));
-				updateList(courseList.getSelectedIndex());
-				break;
-			case "SaveCourse":
-				controller.saveData();
-				break;
+		}
+
+	}
+
+	public void valueChanged(ListSelectionEvent e) {
+		if (e.getSource().equals(slotsToFill)) {
+			if (slotsToFill.getSelectedValue() != null) {
+				availableTeachers.setListData(
+						controller.filerTeachers(slotsToFill.getSelectedValue()).toArray(new TeacherAvailability[0]));
+			}
+			displayArea.setText("");
+		}
+		if (e.getSource().equals(availableTeachers)) {
+			if(availableTeachers.getSelectedValue()!=null)
+				displayArea.setText(availableTeachers.getSelectedValue().display());
+			else{
+				displayArea.setText("");
+			}
 		}
 	}
 
-	public void valueChanged(ListSelectionEvent e)
-	{
-		if(courseList.getSelectedValue()!=null)
-			displayArea.setText(courseList.getSelectedValue().display());
+	public void fillTimeSlots(DataList<CourseTime> t) {
+		slotsToFill.setListData(t.toArray(new CourseTime[0]));
 	}
 
-	public void setCourseList(String path) {
-		controller.setCourseData(path);
-		System.out.println(path);
-		courseList.setListData(controller.getCourseData().toArray(new Course[0]));
+	public void updateViews() {
+		controller.populateCourse();
+		availableTeachers.setListData(new TeacherAvailability[0]);
 	}
-
-	public void setTrainingList(String path) {
-		controller.setTrainingData(path);
-		System.out.println(path);
-		trainingList.setListData(controller.getTrainingData().toArray(new Training[0]));
-	}
-
-	public void updateList(int k) {
-		if(controller.getCourseData()!=null){
-			courseList.setListData(controller.getCourseData().toArray(new Course[0]));
-			courseList.setSelectedIndex(k);
-		}
-		if(controller.getTrainingData()!=null)
-			trainingList.setListData(controller.getTrainingData().toArray(new Training[0]));
-	}
-
 }
