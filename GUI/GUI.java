@@ -24,6 +24,8 @@ public class GUI extends JFrame implements ActionListener {
 	private final String TEACHER_FILE = "Teacher_List.txt";
 	private final String TEACHER_ENGAGEMENT_FILE = "Teacher_Engagement_List.txt";
 	private final String TEACHER_TRAINING_FILE = "Teacher_Training_List.txt";
+	private final String TEACHER_TIMETABLE_FILE = "Teacher_Timetable_List.txt";
+	private final String TEACHER_TRAINING_REQ_FILE = "Teacher_Training_Req_List.txt";
 	Container cPane;
 	CardLayout cardLayout;
 	JPanel cards;
@@ -108,11 +110,17 @@ public class GUI extends JFrame implements ActionListener {
 			case teachers:
 				cur = TEACHER_FILE;
 				break;
+			case teacherTraining:
+				cur = TEACHER_TRAINING_FILE;
+				break;
 			case engagements:
 				cur = TEACHER_ENGAGEMENT_FILE;
 				break;
-			case teacherTraining:
-				cur = TEACHER_TRAINING_FILE;
+			case timetable:
+				cur = TEACHER_TIMETABLE_FILE;
+				break;
+			case training_needed:
+				cur = TEACHER_TRAINING_REQ_FILE;
 				break;
 			default:
 				cur = "";

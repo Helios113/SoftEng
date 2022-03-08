@@ -2,20 +2,23 @@ package Controllers;
 
 import DataLists.DataList;
 import DataParsers.DataParser;
+import DataParsers.DataWriter;
 import DataUnits.Course;
 import DataUnits.Training;
 import GUI.AdminView;
 
 import java.util.ArrayList;
+
 import DataUnits.Teacher;
 import DataUnits.TeacherAvailability;
 import DataUnits.CourseTime;
+import DataUnits.TeacherEngagement;
 
 public class AdminController {
     DataList<Course> courseList;
     DataList<Teacher> teacherList;
     ArrayList<int[]> teacherTrainingList;
-    DataList<CourseTime> teacherEngagementList;
+    ArrayList<TeacherEngagement> teacherEngagementList;
     DataList<Training> trainingList;
     ArrayList<int[]> requirementsList;
     DataList<CourseTime> timeList;
@@ -51,7 +54,9 @@ public class AdminController {
     }
 
     public void setTeacherEngagementData(String path) {
-        teacherEngagementList = DataParser.parseData(path, CourseTime.class);
+        //int - teacher id
+        //course has everything it needs
+        teacherEngagementList = DataParser.parseTeacherEngament(path);
     }
 
     public void populateCourse() {
@@ -70,9 +75,12 @@ public class AdminController {
         for (int[] t : teacherTrainingList) {
             teacherList.getByIndex(t[0]).addTraining(trainingList.getByIndex(t[1]));
         }
-        for (CourseTime t : teacherEngagementList) {
-            teacherList.getByIndex(t.getId()).addTimeSlot(t);
+        for(TeacherEngagement t : teacherEngagementList)
+        {
+            t.getCourseTime().setCourse(courseList.getByIndex(t.getCourseTime().getId()));
+            teacherList.getByIndex(t.getID()).addTimeSlot(t.getCourseTime());
         }
+       
     }
 
     public ArrayList<TeacherAvailability> filerTeachers(CourseTime ct) {
@@ -88,12 +96,11 @@ public class AdminController {
     {
         timeList.remove(t);
     }
-    public void produceList()
+    public void produceList(String timetable, String trainings, String engagements)
     {
-        for(Teacher t : teacherList)
-        {
-            
-        }
+        DataWriter.writeTeacherEngagements(engagements, teacherList);
+        DataWriter.writeTeacherSchedule(timetable, teacherList);
+        DataWriter.writeTeacherTrainings(trainings, teacherList);
     }
 
 }

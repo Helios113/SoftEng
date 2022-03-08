@@ -62,7 +62,6 @@ public class AdminView extends JPanel implements ActionListener, ListSelectionLi
 	public AdminView(GUI a, AdminController controller) {
 		parent = a;
 		this.controller = controller;
-
 		displayArea = new JTextArea();
 		displayArea.setPreferredSize(new Dimension(200, 200));
 
@@ -123,7 +122,7 @@ public class AdminView extends JPanel implements ActionListener, ListSelectionLi
 				updateViews();
 				break;
 			case "Save":
-				controller.produceList();
+				controller.produceList(parent.getPath(FileTypes.timetable),parent.getPath(FileTypes.training_needed),parent.getPath(FileTypes.engagements));
 				break;
 		}
 

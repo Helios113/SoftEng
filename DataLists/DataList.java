@@ -67,10 +67,6 @@ public class DataList<T extends Data> extends AbstractList<T> {
     }
     public boolean add(T elem)
     {
-        if(contains(elem.getName())){
-            System.out.println("element exists");
-            return false;
-        }
         return storage.add(elem);
     }
     public int size()

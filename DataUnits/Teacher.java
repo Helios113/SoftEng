@@ -34,9 +34,7 @@ public class Teacher implements Data{
         return String.format("(%d,%s,%s)",id,name,trainings.toString());
     }
     public boolean isAvailable(TimeSlot t)
-    {
-        System.out.println("isAvailable "+name+" "+t);
-       
+    {       
         for(CourseTime e : engagementSlots)
         {
             if(e.getTimeSlot().dow == t.dow && e.getTimeSlot().time == t.time)
