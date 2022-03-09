@@ -85,4 +85,22 @@ public class DataParser {
         }
         return ret;
     }
+    public static String parseResults(String fileLocation) {
+        String ret = "";
+        System.out.println(fileLocation);
+        File f = new File(fileLocation);
+        Scanner scan;
+        String line;
+        try {
+            scan = new Scanner(f);
+            while (scan.hasNextLine()) {
+                line = scan.nextLine();
+                ret+=line+'\n';
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("error! oh no");
+        }
+        return ret;
+    }
 }
